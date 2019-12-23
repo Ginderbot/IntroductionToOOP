@@ -1,5 +1,6 @@
 #include<iostream>
 //#define CONSTRUCTORS
+//#define DISTANCE
 class Point
 {
 	double x;
@@ -53,12 +54,12 @@ public:
 		std::cout << "CopyConstructor:\t" << this << std::endl;
 	}
 
-	void operator=(const Point& other)
+	Point operator=(const Point& other)
 	{
 		this->x = other.x;
 		this->y = other.y;
 		std::cout << "CopyAssignment:" << this << std::endl;
-
+		return *this;
 	}
 
 	// Methods:
@@ -66,10 +67,29 @@ public:
 	{
 		std::cout << "x = " << x << "\t" << "y = " << y << std::endl;
 	}
+
+	double distance(const Point& other) const
+	{
+		return sqrt(pow(this->x - other.x, 2) + pow(this->y - other.y, 2));
+	}
+
 };
+
+//double distance(Point A, Point B)
+//{
+//	double x_distance = A.get_x() - B.get_x();
+//	double y_distance = A.get_y() - B.get_y();
+//	double distance = sqrt(x_distance*x_distance + y_distance * y_distance);
+//	return distance;
+//}
 
 //#define BASICS
 //#define ENCAPSULATION
+
+double distance(const Point& A, const Point& B)
+{
+	return sqrt(pow(B.get_x() - A.get_x(),2) + pow(B.get_y() - A.get_y(),2));
+}
 
 void main()
 {
@@ -86,12 +106,14 @@ void main()
 	std::cout << pA->x << "\t" << pA->y << std::endl;
 	std::cout << (*pA).x << "\t" << (*pA).y << std::endl;
 #endif // BASICS
+
 #ifdef ENCAPSULATION
 	Point A;
 	A.set_x(5);
 	A.set_y(3);
 	std::cout << A.get_x() << "\t" << A.get_y() << std::endl;
 #endif // ENCAPSULATION
+
 #ifdef Constructors
 	const Point B;
 	/*std::cout << A.get_x() << std::endl;*/
@@ -114,9 +136,27 @@ void main()
 
 #endif // Constructors
 
+#ifdef DISTANCE
 	Point A(5, 2);
 	A.print(); // Default constructor
 	Point B; //Copy assignment
 	B = A;
 	B.print();
+
+	/*Point A(2, 5);
+	Point B(3, 7);
+	A.print();
+	B.print();
+	std::cout << A.distance(B) << std::endl;
+	std::cout << distance(A, B) << std::endl;*/
+	std::cout <<"Расстояние между точками: "<< distance(A, B) << std::endl;
+#endif // DISTANCE
+
+	Point A, B, C;
+	A = B = C = Point(5, 3);
+
+	Point A(5, 2);
+	Point B(8, 3);
+	Point C = A + B;
+
 }
