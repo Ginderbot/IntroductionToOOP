@@ -157,6 +157,6 @@ void main()
 
 	Point A(5, 2);
 	Point B(8, 3);
-	Point C = A + B;
+	//Point C = A + B;
 
 }
