@@ -16,14 +16,7 @@ public:
 	}
 	void set_x(double x)
 	{
-		if (abs(x) <= 100) //abs() - модуль числа.
-		{
-			this->x = x;
-		}
-		else
-		{
-			this->x = 0;
-		}
+		(abs(x) <= 100) ? this->x = x : this->x = 0;//abs() - модуль числа.
 		//if - отфильтровывает некорректные значения.
 	}
 	void set_y(double y)
@@ -54,13 +47,28 @@ public:
 		std::cout << "CopyConstructor:\t" << this << std::endl;
 	}
 
-	Point operator=(const Point& other)
+	Point& operator=(const Point& other)
 	{
 		this->x = other.x;
 		this->y = other.y;
 		std::cout << "CopyAssignment:" << this << std::endl;
 		return *this;
 	}
+
+	Point& operator+=(const Point& other)
+	{
+		this->x += other.x;
+		this->y += other.y;
+		return *this;
+	}
+
+	//Point operator+(const Point&other)
+	//{
+	//	Point result;
+	//	result.x = this->x + other.x;
+	//	result.y = this->y + other.y;
+	//	return result;
+	//}
 
 	// Methods:
 	void print() const
@@ -88,9 +96,24 @@ public:
 
 double distance(const Point& A, const Point& B)
 {
-	return sqrt(pow(B.get_x() - A.get_x(),2) + pow(B.get_y() - A.get_y(),2));
+	return sqrt(pow(B.get_x() - A.get_x(), 2) + pow(B.get_y() - A.get_y(), 2));
 }
 
+Point operator+(const Point& left, const Point& right)
+{
+	Point result;
+	//result.set_x(left.get_x() + right.get_x());
+	//result.set_y(left.get_y() + right.get_y());
+	std::cout << "Global operator+" << std::endl;
+	//return result;
+	return Point(left.get_x() + right.get_x(), left.get_y() + right.get_y());
+}
+Point operator-(const Point& left, const Point& right)
+{
+	Point result;
+	std::cout << "Global operator-" << std::endl;
+	return Point(left.get_x() - right.get_x(), left.get_y() - right.get_y());
+}
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -149,14 +172,25 @@ void main()
 	B.print();
 	std::cout << A.distance(B) << std::endl;
 	std::cout << distance(A, B) << std::endl;*/
-	std::cout <<"Расстояние между точками: "<< distance(A, B) << std::endl;
+	std::cout << "Расстояние между точками: " << distance(A, B) << std::endl;
 #endif // DISTANCE
 
-	Point A, B, C;
-	A = B = C = Point(5, 3);
+	//Point A, B, C;
+	//A = B = C = Point(5, 3);
+
+	int a = 2;
+	int b = 3;
+	int c = a + b;
 
 	Point A(5, 2);
 	Point B(8, 3);
-	//Point C = A + B;
+	Point C;
+	C= A + B;
+	//C = A + B;
+	//A.operator+(B).operator+(C).operator+(A).print();
+	//A += B;
+	C.print();
 
+	A.print();
+	B.print();
 }
