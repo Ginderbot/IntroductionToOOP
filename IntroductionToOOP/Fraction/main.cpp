@@ -6,15 +6,15 @@ class Fraction
 	int numerator;
 	int denominator;
 public:
-	int get_integer(int integer) const
+	int get_integer(int integer) const // целое
 	{
 		return this->intager;
 	}
-	int get_numerator(int numerator) const
+	int get_numerator(int numerator) const // числитель
 	{
 		return this->numerator;
 	}
-	int get_denominator(int denominator)const
+	int get_denominator(int denominator)const // делитель
 	{
 		return this->denominator;
 	}
