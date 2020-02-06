@@ -14,6 +14,10 @@ public:
 	{
 		return this->str;
 	}
+	char* get_str()
+	{
+		return this->str;
+	}
 	/*void set_size()
 	{
 		this->size = size;
@@ -23,7 +27,7 @@ public:
 		this->str = str;
 	}*/
 
-	String(int size=90)
+	String(int size = 90)
 	{
 		this->size = size;
 		this->str = new char[size] {};
@@ -40,8 +44,8 @@ public:
 	{
 		this->size = other.size;
 		str = new char[size] {};
-		strcpy_s(this->str,size, other.str);
-	/*	for (int i = 0; i < size; i++)this->str[i] = other.str[i];*/
+		strcpy_s(this->str, size, other.str);
+		/*	for (int i = 0; i < size; i++)this->str[i] = other.str[i];*/
 		std::cout << "CopyConstructor:\t" << this << std::endl;
 	}
 
@@ -52,13 +56,21 @@ public:
 	}
 	String& operator=(const String &other)
 	{
-		if(this == &other)return *this;
+		if (this == &other)return *this;
 		delete[] this->str;
 		this->size = other.size;
 		str = new char[size] {};
 		strcpy_s(this->str, size, other.str);
 		std::cout << "CopyAssigment:\t" << this << std::endl;
 		return *this;
+	}
+	const char& operator[](int i) const
+	{
+		return str[i];
+	}
+	char& operator[](int i)
+	{
+		return str[i];
 	}
 	//  Metods
 	void print()
@@ -67,27 +79,34 @@ public:
 	}
 
 };
-	std::ostream& operator<< (std::ostream& os, const String& obj)
+std::ostream& operator<< (std::ostream& os, const String& obj)
+{
+	return os << obj.get_str();
+}
+String operator+(const String &Left, const String &Right)
+{
+	String cat = Left.get_size() + Right.get_size() - 1;
+	for (int i = 0; i < Left.get_size(); i++)
 	{
-		return os<<obj.get_str();
+		cat[i] = Left[i];
 	}
+	for (int i = 0; i < Right.get_size(); i++)
+	{
+		cat[i + Left.get_size() - 1] = Right[i];
+	}
+	return cat;
+}
 
 void main()
 {
-	String str1;
+	String str1 = "Hello";
 	str1.print();
 
-	String str2 = "Hello";
+	String str2 = "World!";
 	str2.print();
 
-	String str3 = str2; //CopyConstructor
+	String str3 = str1 + str2;
 	str3.print();
 
-	str1 = str2; //CopyAssigment
-	str1.print();
-
-	str1 = str1;
-	str1.print();
-
-	std::cout << str1 << std::endl;
+	/*std::cout << str3 << std::endl;*/
 }
