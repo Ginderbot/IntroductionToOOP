@@ -6,7 +6,7 @@ class String
 	int size; //количество байт
 	char* str;
 public:
-	int get_size() const
+	const int get_size() const
 	{
 		return this->size;
 	}
@@ -18,14 +18,14 @@ public:
 	{
 		return this->str;
 	}
-	/*void set_size()
+
+	void set_str(const char* str)
 	{
-		this->size = size;
+		delete[] this->str;
+		this->size = strlen(str) + 1;
+		this->str = new char[size] {};
+		strcpy(this->str, str);
 	}
-	void set_str() const
-	{
-		this->str = str;
-	}*/
 
 	String(int size = 90)
 	{
@@ -79,10 +79,6 @@ public:
 	}
 
 };
-std::ostream& operator<< (std::ostream& os, const String& obj)
-{
-	return os << obj.get_str();
-}
 String operator+(const String &Left, const String &Right)
 {
 	String cat = Left.get_size() + Right.get_size() - 1;
@@ -96,9 +92,49 @@ String operator+(const String &Left, const String &Right)
 	}
 	return cat;
 }
+bool operator==(const String& Left, const String& Right)
+{
+	if (strlen(Left.get_str()) != strlen(Right.get_str())) return false;
+	for (int i = 0; Left[i]; i++)
+	{
+		if (Left[i] != Right[i]) return false;
+	}
+	return true;
+}
+bool operator!=(const String& Left, const String& Right)
+{
+	return !(Left == Right);
+}
+bool operator<(const String& Left, const String& Right)
+{
+	return strcmp(Left.get_str(), Right.get_str()) < 0 ? true : false;
+}
+bool operator>(const String& Left, const String& Right)
+{
+	return strcmp(Left.get_str(), Right.get_str()) > 0 ? true : false;
+}
+std::ostream& operator<< (std::ostream& os, const String& obj)
+{
+	return os << obj.get_str();
+}
+std::istream& operator>> (std::istream& is, String& obj)
+{
+	char* sz_str = new char[USHRT_MAX] {};
+	is >> sz_str;
+	sz_str = (char*)realloc(sz_str, strlen(sz_str) + 1);
+	obj.set_str(sz_str);
+	delete[] sz_str;
+	return is;
+}
+
+
+
+//#define OPERATOR_PLUS_CHECK
+//#define INPUT_CHECK
 
 void main()
 {
+#ifdef OPERATOR_PLUS_CHECK
 	String str1 = "Hello";
 	str1.print();
 
@@ -107,6 +143,16 @@ void main()
 
 	String str3 = str1 + str2;
 	str3.print();
+#endif // OPERATOR_PLUS_CHECK
+#ifdef INPUT_CHECK
+	String str = "Hello";
+	//std::cout << "Input: ";
+	std::cout << str << std::endl;
+	std::cin >> str;
+	std::cout << str << std::endl;
+#endif // INPUT_CHECK
 
-	/*std::cout << str3 << std::endl;*/
+	String str1 = "Hello";
+	String str2 = "Hello";
+	std::cout << (str1 < str2) << std::endl;
 }
