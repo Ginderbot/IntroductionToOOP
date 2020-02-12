@@ -113,6 +113,14 @@ bool operator>(const String& Left, const String& Right)
 {
 	return strcmp(Left.get_str(), Right.get_str()) > 0 ? true : false;
 }
+bool operator>=(const String& Left, const String& Right)
+{
+	return (Left > Right) || (Left == Right);
+}
+bool operator<=(const String& Left, const String& Right)
+{
+	return (Left < Right) || (Left == Right);
+}
 std::ostream& operator<< (std::ostream& os, const String& obj)
 {
 	return os << obj.get_str();
