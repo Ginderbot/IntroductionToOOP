@@ -27,24 +27,24 @@ public:
 		strcpy(this->str, str);
 	}
 
-	String(int size = 90)
+	explicit String(int size = 90) : size(size), str(new char[size] {})
 	{
-		this->size = size;
-		this->str = new char[size] {};
+		//this->size = size;
+		//this->str = new char[size] {};
 		std::cout << "DefaultConstructor:\t" << this << std::endl;
 	}
-	String(const char* str)
+	String(const char* str) : String(strlen(str) + 1)
 	{
-		this->size = strlen(str) + 1;
-		this->str = new char[size] {};
+		//this->size = strlen(str) + 1;
+		//this->str = new char[size] {};
 		for (int i = 0; i < size; i++)this->str[i] = str[i];
 		std::cout << "Constructor:\t" << this << std::endl;
 	}
-	String(const String &other)
+	String(const String &other): String(other.str)
 	{
-		this->size = other.size;
+		/*this->size = other.size;
 		str = new char[size] {};
-		strcpy_s(this->str, size, other.str);
+		strcpy_s(this->str, size, other.str);*/
 		/*	for (int i = 0; i < size; i++)this->str[i] = other.str[i];*/
 		std::cout << "CopyConstructor:\t" << this << std::endl;
 	}
@@ -81,7 +81,7 @@ public:
 };
 String operator+(const String &Left, const String &Right)
 {
-	String cat = Left.get_size() + Right.get_size() - 1;
+	String cat(Left.get_size() + Right.get_size() - 1);
 	for (int i = 0; i < Left.get_size(); i++)
 	{
 		cat[i] = Left[i];
