@@ -161,6 +161,6 @@ void main()
 #endif // INPUT_CHECK
 
 	String str1 = "Hello";
-	String str2 = "Hello";
+	String str2 = "World";
 	std::cout << (str1 < str2) << std::endl;
 }
