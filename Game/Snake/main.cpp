@@ -79,7 +79,7 @@ void main()
 			std::cout << std::endl;
 		}
 		std::cout << "Spore: " << mass - 3;
-		Sleep(200);
+		Sleep(100);
 	}
 	system("CLS");
 	std::cout << "Game over" << std::endl << "Spore: " << mass - 3;
