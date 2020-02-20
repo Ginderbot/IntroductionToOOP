@@ -49,7 +49,7 @@ public:
 
 	void print()const
 	{
-		std::cout <<"Фамилия: "<< last_name << "\t" <<"Имя: "<< first_name << "\t" << "Возраст: " << age << std::endl;
+		std::cout << "Фамилия: " << last_name << "\t" << "Имя: " << first_name << "\t" << "Возраст: " << age << std::endl;
 	}
 };
 
@@ -103,7 +103,8 @@ public:
 	{
 		set_specialty(spec);
 		set_group(group);
-		this->rating = this->attendence = 0;
+		set_rating(rating);
+		set_attendence(attendence);
 		std::cout << "SConstructor:\t" << this << std::endl;
 	}
 	~Student()
@@ -175,19 +176,30 @@ public:
 class Graduate :public Student
 {
 	std::string topic;
+	std::string curator;
 	bool done;
 public:
 	const std::string& get_topic()const
 	{
 		return topic;
 	}
+	const std::string& get_curator()const
+	{
+		return curator;
+	}
 	bool get_done()
 	{
 		return done;
 	}
+private:
 	void set_topic(const std::string& topic)
 	{
 		this->topic = topic;
+	}
+public:
+	void set_curator(const std::string& curator)
+	{
+		this->curator = curator;
 	}
 	void set_done(bool done)
 	{
@@ -199,11 +211,12 @@ public:
 	Graduate
 	(
 		const std::string& last_name, const std::string& first_name, unsigned int age,
-		const std::string& spec, const std::string group, unsigned int rating, unsigned int attendence,
-		const std::string& topic,bool done
-	) : Student(last_name,first_name,age,spec, group, rating, attendence)
+		const std::string& spec, const std::string& group, unsigned int rating, unsigned int attendence,
+		const std::string& topic, const std::string& curator, bool done = 0
+	) : Student(last_name, first_name, age, spec, group, rating, attendence)
 	{
 		set_topic(topic);
+		set_curator(curator);
 		set_done(done);
 		std::cout << "GConstructor:\t" << this << std::endl;
 	}
@@ -214,7 +227,7 @@ public:
 	void print()const
 	{
 		Student::print();
-		std::cout << "Тема роботы: " << topic << "\t" << "Готовность: " << "\t";
+		std::cout << "Тема роботы: " << topic << "\t" << "Куратор:" << curator << "\t" << "Готовность: ";
 		(done) ? std::cout << "Выполнено" : std::cout << "В процессе";
 		std::cout << std::endl;
 	}
@@ -233,6 +246,9 @@ void main()
 	Teacher teach("Енштейн", "Альберт", 141, "Астрономия", 20);
 	teach.print();
 
-	Graduate grad("Иванченко", "Иван", 21, "Дизайн", "СТ ДВ 37", 5, 5, "Смысл жизни",4);
+	Graduate grad(
+		"Иванченко", "Иван", 21,
+		"Дизайн", "СТ ДВ 37", 95, 34,
+		"Смысл жизни", "Петренко");
 	grad.print();
 }
