@@ -49,7 +49,7 @@ public:
 
 	void print()const
 	{
-		std::cout << last_name << "\t" << first_name << "\t" << age << std::endl;
+		std::cout <<"Фамилия: "<< last_name << "\t" <<"Имя: "<< first_name << "\t" << "Возраст: " << age << std::endl;
 	}
 };
 
@@ -153,7 +153,7 @@ public:
 	Teacher
 	(
 		const std::string& last_name, const std::string& first_name, unsigned int age,
-		const std::string& subject, unsigned int number_of_groups, unsigned int evil=20
+		const std::string& subject, unsigned int number_of_groups, unsigned int evil = 100
 	) : Human(last_name, first_name, age)
 	{
 		set_subject(subject);
@@ -168,7 +168,55 @@ public:
 	void print()const
 	{
 		Human::print();
-		std::cout <<"Предмет: "<< subject << "\t" <<"Количество груп: "<< experience << "\t" <<"Опит преподавания: "<< evil<<std::endl;
+		std::cout << "Предмет: " << subject << "\t" << "Количество груп: " << experience << "\t" << "Опит преподавания: " << evil << std::endl;
+	}
+};
+
+class Graduate :public Student
+{
+	std::string topic;
+	bool done;
+public:
+	const std::string& get_topic()const
+	{
+		return topic;
+	}
+	bool get_done()
+	{
+		return done;
+	}
+	void set_topic(const std::string& topic)
+	{
+		this->topic = topic;
+	}
+	void set_done(bool done)
+	{
+		this->done = done;
+	}
+
+	// Constructor
+
+	Graduate
+	(
+		const std::string& last_name, const std::string& first_name, unsigned int age,
+		const std::string& spec, const std::string group, unsigned int rating, unsigned int attendence,
+		const std::string& topic,bool done
+	) : Student(last_name,first_name,age,spec, group, rating, attendence)
+	{
+		set_topic(topic);
+		set_done(done);
+		std::cout << "GConstructor:\t" << this << std::endl;
+	}
+	~Graduate()
+	{
+		std::cout << "GDestructor:\t" << this << std::endl;
+	}
+	void print()const
+	{
+		Student::print();
+		std::cout << "Тема роботы: " << topic << "\t" << "Готовность: " << "\t";
+		(done) ? std::cout << "Выполнено" : std::cout << "В процессе";
+		std::cout << std::endl;
 	}
 };
 
@@ -181,6 +229,9 @@ void main()
 	Student stud("Тупенко", "Василь", 18, "Дизайн", "СТ ДВ 37");
 	stud.print();
 
-	Teacher teach("Енштейн", "Альберт", 141, "Астрономия", 100);
+	Teacher teach("Енштейн", "Альберт", 141, "Астрономия", 20);
 	teach.print();
+
+	Graduate grad("Иванченко", "Иван", 21, "Дизайн", "СТ ДВ 37", 5, 5, "Смысл жизни",4);
+	grad.print();
 }
