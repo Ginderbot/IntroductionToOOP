@@ -1,4 +1,5 @@
 #include <iostream>
+#include <regex>
 #include <string>
 
 class Human
@@ -22,7 +23,9 @@ public:
 
 	void set_last_name(const std::string& last_name)
 	{
+		std::regex exp ("\\w");
 		this->last_name = last_name;
+
 	}
 	void set_first_name(const std::string& first_name)
 	{
@@ -42,7 +45,7 @@ public:
 		set_age(age);
 		std::cout << "HConstructor:\t" << this << std::endl;
 	}
-	~Human()
+	virtual ~Human()
 	{
 		std::cout << "HDestructor:\t" << this << std::endl;
 	}
@@ -240,7 +243,7 @@ public:
 	}
 };
 
-
+//#define POLIMORPHISM
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -259,6 +262,7 @@ void main()
 		"Смысл жизни", "Петренко");
 	grad.print();*/
 
+#ifdef POLIMORPHISM
 	Human* groop[] =
 	{
 		new Student("Ковальчук","Антон",15,"РПО","СТ ПВ 35", 95,100),
@@ -270,10 +274,21 @@ void main()
 		new Graduate("Колач","Геннадий",21,"РПО","СТ ПВ 35", 96,100,"Разработка игры для андроид", "Some Tetcher",1),
 	};
 
-	for (int i = 0; i < sizeof(groop)/sizeof(Human*); i++)
+	for (int i = 0; i < sizeof(groop) / sizeof(Human*); i++)
 	{
 		std::cout << "\n----------------------------------------------------------------------------------------------\n";
-		groop[i]->print();	
+		groop[i]->print();
+	}
+	for (int i = 0; i < sizeof(groop) / sizeof(Human*); i++)
+	{
+		delete groop[i];
 	}
 	std::cout << "\n----------------------------------------------------------------------------------------------\n";
+#endif // POLIMORPHISM
+	std::string name;
+	std::cout << "Input name "; std::cin >> name;
+	std::regex rgx("[A-Z][a-z]{1,9}");
+	std::cout << std::regex_match(name, rgx, std::regex_constants::match_default)<<std::endl;
+
+
 }
