@@ -287,7 +287,7 @@ void main()
 #endif // POLIMORPHISM
 	std::string name;
 	std::cout << "Input name "; std::cin >> name;
-	std::regex rgx("[A-Z][a-z]{1,9}");
+	std::regex rgx("[A-Z][a-z]{1,19}");
 	std::cout << std::regex_match(name, rgx, std::regex_constants::match_default)<<std::endl;
 
 
