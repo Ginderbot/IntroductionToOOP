@@ -47,9 +47,15 @@ public:
 		std::cout << "HDestructor:\t" << this << std::endl;
 	}
 
-	void print()const
+	virtual void print()const
 	{
-		std::cout << "Фамилия: " << last_name << "\t" << "Имя: " << first_name << "\t" << "Возраст: " << age << std::endl;
+		std::cout.width(8);
+		/*std::ios_base::left;*/
+		std::cout /*<< "Фамилия: " */<< last_name << "\t";
+		std::cout.width(8);
+		std::cout /*<< "Имя: " */<< first_name << "\t";
+		std::cout.width(8);
+		std::cout /*<< "Возраст: "*/ << age << std::endl;
 	}
 };
 
@@ -169,7 +175,8 @@ public:
 	void print()const
 	{
 		Human::print();
-		std::cout << "Предмет: " << subject << "\t" << "Количество груп: " << experience << "\t" << "Опит преподавания: " << evil << std::endl;
+		std::cout << "Предмет: " << subject << "\t";
+		std::cout << "Количество груп: " << experience << "\t" << "Опит преподавания: " << evil << std::endl;
 	}
 };
 
@@ -237,7 +244,7 @@ public:
 void main()
 {
 	setlocale(LC_ALL, "");
-	Human human("Тупенко", "Василь", 18);
+	/*Human human("Тупенко", "Василь", 18);
 	human.print();
 
 	Student stud("Тупенко", "Василь", 18, "Дизайн", "СТ ДВ 37");
@@ -250,5 +257,23 @@ void main()
 		"Иванченко", "Иван", 21,
 		"Дизайн", "СТ ДВ 37", 95, 34,
 		"Смысл жизни", "Петренко");
-	grad.print();
+	grad.print();*/
+
+	Human* groop[] =
+	{
+		new Student("Ковальчук","Антон",15,"РПО","СТ ПВ 35", 95,100),
+		new Student("Кравцов","Артём",15,"РПО","СТ ПВ 35", 85,97),
+		new Teacher("Кобылинский","Андрей",42,"Hurdware&Windows", 5, 0),
+		new Student("Горбенко","Богдан",16,"РПО","СТ ПВ 35", 99,100),
+		new Graduate("Маслак","Михаил",17,"РПО","СТ ПВ 35", 95,100,"3D Shooter development", "О.А."),
+		new Teacher("Котун","Олег",35,"С++", 5, 32),
+		new Graduate("Колач","Геннадий",21,"РПО","СТ ПВ 35", 96,100,"Разработка игры для андроид", "Some Tetcher",1),
+	};
+
+	for (int i = 0; i < sizeof(groop)/sizeof(Human*); i++)
+	{
+		std::cout << "\n----------------------------------------------------------------------------------------------\n";
+		groop[i]->print();	
+	}
+	std::cout << "\n----------------------------------------------------------------------------------------------\n";
 }
