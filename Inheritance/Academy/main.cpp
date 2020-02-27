@@ -242,7 +242,8 @@ public:
 		std::cout << std::endl;
 	}
 };
-
+//#define REGEX_NAME
+#define REGEX_GROOP
 //#define POLIMORPHISM
 void main()
 {
@@ -271,7 +272,7 @@ void main()
 		new Student("Горбенко","Богдан",16,"РПО","СТ ПВ 35", 99,100),
 		new Graduate("Маслак","Михаил",17,"РПО","СТ ПВ 35", 95,100,"3D Shooter development", "О.А."),
 		new Teacher("Котун","Олег",35,"С++", 5, 32),
-		new Graduate("Колач","Геннадий",21,"РПО","СТ ПВ 35", 96,100,"Разработка игры для андроид", "Some Tetcher",1),
+		new Graduate("Колач","Геннадий",22,"РПО","СТ ПВ 35", 96,100,"Разработка игры для андроид", "Some Tetcher",1),
 	};
 
 	for (int i = 0; i < sizeof(groop) / sizeof(Human*); i++)
@@ -285,10 +286,20 @@ void main()
 	}
 	std::cout << "\n----------------------------------------------------------------------------------------------\n";
 #endif // POLIMORPHISM
+#ifdef REGEX_NAME
 	std::string name;
 	std::cout << "Input name "; std::cin >> name;
 	std::regex rgx("[A-Z][a-z]{1,19}");
 	std::cout << std::regex_match(name, rgx, std::regex_constants::match_default)<<std::endl;
-
-
+#endif // REGEX_NAME
+#ifdef REGEX_GROOP
+	std::string groop;
+	std::cout << "Input name ";/* std::cin >> groop;*/
+	std::regex rgx("(ST|PS[ _\-](SB|VS))[ _\-](PU|PV|ITU|ITV|DU|DV)[_ \-]\\d{2}[abv]?");
+	getline(std::cin, groop);
+	std::regex rgx_replace(" |\-");
+	groop=std::regex_replace(groop, rgx_replace, "_", std::regex_constants::match_default);
+	std::cout << std::regex_match(groop, rgx, std::regex_constants::match_default) << std::endl;
+	std::cout << groop << std::endl;
+#endif REGEX_GROOP
 }
