@@ -1,6 +1,7 @@
 #include <iostream>
 #define delimiter "------------------------------------------\n"
 
+
 class Element
 {
 	int Data;
@@ -27,23 +28,48 @@ class ForwardList
 	Element*Head;
 	unsigned int Size;
 public:
+	unsigned int get_size()const
+	{
+		return Size;
+	}
 	ForwardList()
 	{
 		Head = nullptr; // Если список пуст то его голова указывает на 0
 		Size = 0;
 		std::cout << "LConstructor" << "\t" << "\t" << this << std::endl;
 	}
+	ForwardList(int size):ForwardList()
+	{
+		while (size--)push_front(0);
+	}
+	ForwardList(const std::initializer_list<int>& il) :ForwardList()
+	{
+		for (const int* it = il.begin(); it != il.end(); it++)
+		{
+			push_back(*it);
+		}
+	}
 	~ForwardList()
 	{
+		while (Head)pop_front();
 		std::cout << "LDestructor" << "\t" << "\t" << this << std::endl;
+	}
+
+	//Operators:
+	int& operator [](int index)
+	{
+		Element* Temp = Head;
+		for (int i = 0; i < index; i++)Temp=Temp->pNext;
+		return Temp->Data;
 	}
 
 	//Добавление елемента
 	void push_front(int Data)
 	{
-		Element* New = new Element(Data);
+		/*Element* New = new Element(Data);
 		New->pNext = Head;
-		Head = New;
+		Head = New;*/
+		Head = new Element(Data, Head);
 		Size++;
 	}
 
@@ -80,9 +106,10 @@ public:
 		{
 			Temp = Temp->pNext;
 		}
-		Element*New = new Element(Data);
+		/*Element*New = new Element(Data);
 		New->pNext = Temp->pNext;
-		Temp->pNext = New;
+		Temp->pNext = New;*/
+		Temp = new Element(Data, Temp->pNext);
 		Size++;
 	}
 
@@ -107,26 +134,24 @@ public:
 		Size--;
 	}
 
-	/*void erase(int index)
+	void erase(int index,int Data)
 	{
-		Element*Temp = Head;
-		Element*buff = Head;
-		int index;
-		for (int i = 0; i < index; i++)
+		if (index>=this->Size)
 		{
-			buff = buff->pNext;
+			throw std::exception("Error: Out of range when erasing.");
 		}
-		while (Temp->pNext != nullptr)
+		if (index==0)
 		{
-			Temp = Temp->pNext;
-			if (Temp==buff)
-			{
-				delete buff->pNext;
-				buff->pNext = nullptr;
-				Temp = Temp->pNext;
-			}
+			pop_front();
+			return;
 		}
-	}*/
+		Element* Temp = Head;
+		for (int i = 0; i < index-1; i++)Temp = Temp->pNext;
+		Element* buff = Temp->pNext;
+		Temp->pNext = Temp->pNext->pNext;
+		delete buff;
+		Size--;
+	}
 
 	//metods
 	void print() const
@@ -143,10 +168,17 @@ public:
 	}
 };
 
+//#define BASE_FUNCTIONS_CHECK
+//#define CONSTRUCTORS_CHECK_1
+#define CONSTRUCTORS_CHECK_2
 void main()
 {
 	int n;
-	std::cout << "Input list size"; std::cin >> n;
+	std::cout << "Input list size: "; std::cin >> n;
+#ifdef BASE_FUNCTIONS_CHECK
+
+
+
 	//Element e(5);
 	ForwardList fl;
 
@@ -164,22 +196,58 @@ void main()
 	//fl.print();
 
 	int index;
-	int value;
-	std::cout << "Input index"; std::cin >> index;
-	std::cout << "Input value"; std::cin >> value;
+	//int value;
+	//std::cout << "Input index"; std::cin >> index;
+	//std::cout << "Input value"; std::cin >> value;
 
-	std::cout << delimiter;
-	fl.insert(index,value);
-	fl.print();
-	/*std::cout << delimiter;
-	fl.erase();
-	fl.print();*/
+	//std::cout << delimiter;
+	//fl.insert(index,value);
+	//fl.print();
+	//std::cout << delimiter;
+	//
 
-	ForwardList fl2;
-	fl2.push_back(3);
-	fl2.push_back(5);
-	fl2.push_back(8);
-	fl2.push_back(13);
-	fl2.push_back(21);
-	fl2.print();
+	//ForwardList fl2;
+	//fl2.push_back(3);
+	//fl2.push_back(5);
+	//fl2.push_back(8);
+	//fl2.push_back(13);
+	//fl2.push_back(21);
+	//fl2.print();
+
+	//try
+	//{
+	//	std::cout << "Input index: "; std::cin >> index;
+	//	fl.erase(index);
+	//	fl.print();
+	//}
+	//catch (const std::exception& e)
+	//{
+	//	std::cerr << e.what() << std::endl;
+	//	/*cin - Console Input;
+	//	cout - Console Output;
+	//	ceer -*/
+	//}
+#endif // BASE_FUNCTIONS_CHECK
+#ifdef CONSTRUCTORS_CHECK_1
+	ForwardList fl(n);
+	for (int i = 0; i < fl.get_size(); i++)
+	{
+		fl[i] = rand() % 100;
+	}
+	for (int i = 0; i < fl.get_size(); i++)
+	{
+		std::cout << fl[i] << "\t";
+	}
+	std::cout << std::endl;
+#endif // CONSTRUCTORS_CHECK_!
+#ifdef CONSTRUCTORS_CHECK_2
+	ForwardList list = { 3,5,8,13,21 };
+	for (int i = 0; i < list.get_size(); i++)
+	{
+		std::cout << list[i] << "\t";
+	}
+	std::cout << std::endl;
+
+#endif // CONSTRUCTORS_CHECK_2
+
 }
