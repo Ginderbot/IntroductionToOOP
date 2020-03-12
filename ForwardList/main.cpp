@@ -27,10 +27,28 @@ public:
 		std::cout << "EDestructor" <<"\t" << "\t" << this << std::endl;
 	}
 	friend class ForwardList;
+	friend class Iterator;
 };
 
 int Element::count = 0;
+class Iterator
+{
+	Element* Temp;
+public:
+	Iterator(Element*Temp)
+	{
+		this->Temp = Temp;
+	}
+	~Iterator()
+	{
 
+	}
+	Iterator& operator++()
+	{
+		Temp = Temp->pNext;
+		return *this;
+	}
+};
 class ForwardList
 {
 	Element*Head;
@@ -63,7 +81,9 @@ public:
 	}
 	ForwardList(const ForwardList& other) :ForwardList()
 	{
-		for (Element* Temp = other.Head; Temp!=nullptr; Temp = Temp->pNext)push_back(Temp->Data);
+		//for (Element* Temp = other.Head; Temp!=nullptr; Temp = Temp->pNext)
+		for (Iterator Temp = other.Head; Temp!=nullptr; Temp++)
+			push_back(*Temp);
 		std::cout << "FLCopyConstructor:\t" << this << std::endl;
 	}
 	ForwardList(ForwardList&& other)
@@ -204,14 +224,13 @@ public:
 			Temp = Temp->pNext;
 		}
 		std::cout <<"List size: "<< Size <<" elements"<< std::endl;
-
 	}
 };
 
 ForwardList operator +(const ForwardList& left, const ForwardList& right)
 {
 	ForwardList buffer = left;
-	for (const Element*Temp = right.get_head(); Temp; Temp = Temp->getpNext())
+	for (const Element*Temp = right.get_head(); Temp!=nullptr; Temp=Temp->getpNext)
 		buffer.push_back(Temp->getData());
 	return buffer;
 }
