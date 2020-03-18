@@ -48,6 +48,19 @@ public:
 		Temp = Temp->pNext;
 		return *this;
 	}
+
+	bool operator==(const Iterator& other)
+	{
+		return this->Temp == other.Temp;
+	}
+	bool operator!=(const Iterator& other)
+	{
+		return this->Temp != other.Temp;
+	}
+	int operator*()
+	{
+		return Temp->Data;
+	}
 };
 class ForwardList
 {
@@ -55,6 +68,10 @@ class ForwardList
 	unsigned int Size;
 public:
 	const Element* get_head()const
+	{
+		return Head;
+	}
+	Element* get_head()
 	{
 		return Head;
 	}
@@ -82,7 +99,7 @@ public:
 	ForwardList(const ForwardList& other) :ForwardList()
 	{
 		//for (Element* Temp = other.Head; Temp!=nullptr; Temp = Temp->pNext)
-		for (Iterator Temp = other.Head; Temp!=nullptr; Temp++)
+		for (Iterator Temp = other.Head; Temp!=nullptr; ++Temp)
 			push_back(*Temp);
 		std::cout << "FLCopyConstructor:\t" << this << std::endl;
 	}
@@ -230,7 +247,7 @@ public:
 ForwardList operator +(const ForwardList& left, const ForwardList& right)
 {
 	ForwardList buffer = left;
-	for (const Element*Temp = right.get_head(); Temp!=nullptr; Temp=Temp->getpNext)
+	for (const Element*Temp = right.get_head(); Temp!=nullptr; Temp=Temp->getpNext())
 		buffer.push_back(Temp->getData());
 	return buffer;
 }
@@ -322,6 +339,11 @@ void main()
 	ForwardList list3;
 	list3 = list + list2;
 	list3.print();
+	for (Iterator it = list3.get_head(); it != nullptr; ++it)
+	{
+		std::cout << *it << "\t";
+	}
+	std::cout << std::endl;
 #endif // CONSTRUCTORS_CHECK_2
 
 }
