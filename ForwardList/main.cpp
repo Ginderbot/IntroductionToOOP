@@ -48,6 +48,13 @@ public:
 		Temp = Temp->pNext;
 		return *this;
 	}
+	Iterator& operator++(int)
+	{
+		Iterator old = *this;
+		Temp = Temp->pNext;
+		return old;
+	}
+
 
 	bool operator==(const Iterator& other)
 	{
@@ -339,7 +346,7 @@ void main()
 	ForwardList list3;
 	list3 = list + list2;
 	list3.print();
-	for (Iterator it = list3.get_head(); it != nullptr; ++it)
+	for (Iterator it = list3.get_head(); it != nullptr; it++)
 	{
 		std::cout << *it << "\t";
 	}
