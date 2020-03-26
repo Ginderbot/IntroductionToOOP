@@ -30,11 +30,11 @@ public:
 		Iterator(Element* Temp)
 		{
 			this->Temp = Temp;
-			std::cout << "ItConstructor\t" <<this<< std::endl;
+			//std::cout << "ItConstructor\t" <<this<< std::endl;
 		}
 		~Iterator()
 		{
-			std::cout << "ItDestructor\t" <<this<< std::endl;
+			//std::cout << "ItDestructor\t" <<this<< std::endl;
 		}
 		//Operators:
 		Iterator& operator++()
@@ -65,7 +65,22 @@ public:
 			return this->Temp != other.Temp;
 		}
 	};
-
+	Iterator begin()
+	{
+		return this->head;
+	}
+	Iterator end()
+	{
+		return nullptr;
+	}
+	const Iterator begin()const
+	{
+		return this->head;
+	}
+	const Iterator end()const
+	{
+		return nullptr;
+	}
 	List()
 	{
 		head = tail = nullptr;
@@ -86,6 +101,14 @@ public:
 		for (Iterator it = other.head; it != nullptr; it++)push_back(*it);
 		std::cout << "LCopyConstructor" << std::endl;
 	}
+	List(List&&other)
+	{
+		this->head = other.head;
+		this->tail = other.tail;
+		this->size = other.size;
+		other.head = other.tail = nullptr;
+		std::cout << "LMoveConstructor" << std::endl;
+	}
 	~List()
 	{
 		while (tail || head)
@@ -102,6 +125,16 @@ public:
 		while (head)pop_front();
 		for (Element* Temp = other.head; Temp; Temp++);
 		std::cout << "LCopyAssignment" << this << std::endl;
+		return *this;
+	}
+	List& operator = (List& other)
+	{
+		while (head)pop_front();
+		this->head = other.head;
+		this->tail = other.tail;
+		this->size = other.size;
+		other.head = other.tail = nullptr;
+		std::cout << "LMoveConstructor" <<this<< std::endl;
 		return *this;
 	}
 	//adding elements
@@ -270,7 +303,16 @@ public:
 //		return Tail;
 //	}
 //};
-
+List operator+(const List& left, const List&right)
+{
+	List buffer = left;
+	for (List::Iterator it = right.begin(); it != right.end(); it++)
+	{
+		buffer.push_back(*it);
+	}
+	std::cout << "Global operator+\n";
+		return buffer;
+}
 //#define BASE_CHECK
 //#define CONSTRUCTORS_CHECK
 void main()
@@ -338,9 +380,22 @@ void main()
 	std::cout << std::endl;
 
 
-	/*List list = { 3,5,8,13,21 };
-	for (int i : list) {
+	List list = { 3,5,8,13,21 };
+	List list2 = { 34,55,89 };
+	for (List::Iterator it = list2.begin(); it != list2.end(); it++)
+	{
+		std::cout << *it << "\t";
+	}
+	std::cout << std::endl;
+	std::cout << "___________________________________________\n";
+
+	for (int i : list + list2) {
 		std::cout << i << "\t";
 	}
-	std::cout << std::endl;*/
+	std::cout << std::endl;
+
+	List list3;
+	list3 = list + list2;
+	list3.print();
+	std::cout << "___________________________________________\n";
 }
