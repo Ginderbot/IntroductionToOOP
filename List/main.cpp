@@ -42,7 +42,7 @@ public:
 			Temp = Temp->pNext;
 			return *this;
 		}
-		Iterator& operator++(int)
+		Iterator operator++(int)
 		{
 			Iterator old = *this;
 			Temp = Temp->pNext;
@@ -65,6 +65,51 @@ public:
 			return this->Temp != other.Temp;
 		}
 	};
+	class ReverseIterator
+	{
+		Element *Temp;
+	public:
+		ReverseIterator(Element*Temp)
+		{
+			this->Temp = Temp;
+		}
+		~ReverseIterator()
+		{
+
+		}
+
+		// Operators
+
+		ReverseIterator& operator++()
+		{
+			Temp = Temp->pPrev;
+			return *this;
+		}
+		ReverseIterator operator++(int)
+		{
+			ReverseIterator old = *this;
+			Temp = Temp->pPrev;
+			return old;
+		}
+
+		const int& operator*()const
+		{
+			return Temp->data;
+		}
+		int& operator*()
+		{
+			return Temp->data;
+		}
+
+		bool operator ==(const ReverseIterator& other)const
+		{
+			return this->Temp == other.Temp;
+		}
+		bool operator !=(const ReverseIterator& other)const
+		{
+			return this->Temp != other.Temp;
+		}
+	};
 	Iterator begin()
 	{
 		return this->head;
@@ -73,11 +118,27 @@ public:
 	{
 		return nullptr;
 	}
+	const ReverseIterator rbegin()const
+	{
+		return tail;
+	}
+	const ReverseIterator rend()const
+	{
+		return nullptr;
+	}
 	const Iterator begin()const
 	{
 		return this->head;
 	}
 	const Iterator end()const
+	{
+		return nullptr;
+	}
+	ReverseIterator rbegin()
+	{
+		return tail;
+	}
+	ReverseIterator rend()
 	{
 		return nullptr;
 	}
@@ -97,7 +158,7 @@ public:
 	}
 	List(const List&other) :List()
 	{
-	/*	for (Element*Temp = other.head; Temp; Temp = Temp->pNext)push_back(Temp->data);*/
+		/*	for (Element*Temp = other.head; Temp; Temp = Temp->pNext)push_back(Temp->data);*/
 		for (Iterator it = other.head; it != nullptr; it++)push_back(*it);
 		std::cout << "LCopyConstructor" << std::endl;
 	}
@@ -123,7 +184,7 @@ public:
 	{
 		if (this == &other)return *this;
 		while (head)pop_front();
-		for (Element* Temp = other.head; Temp; Temp++);
+		for (Element* Temp = other.head; Temp; Temp=Temp->pNext)push_back(Temp->data);
 		std::cout << "LCopyAssignment" << this << std::endl;
 		return *this;
 	}
@@ -134,7 +195,7 @@ public:
 		this->tail = other.tail;
 		this->size = other.size;
 		other.head = other.tail = nullptr;
-		std::cout << "LMoveConstructor" <<this<< std::endl;
+		std::cout << "LMoveConstructor" << this << std::endl;
 		return *this;
 	}
 	//adding elements
@@ -311,14 +372,14 @@ List operator+(const List& left, const List&right)
 		buffer.push_back(*it);
 	}
 	std::cout << "Global operator+\n";
-		return buffer;
+	return buffer;
 }
 //#define BASE_CHECK
 //#define CONSTRUCTORS_CHECK
 void main()
 {
 	int n;
-	std::cout << "Input list size: "; std::cin >> n;
+	std::cout << "Input list size: "; //std::cin >> n;
 #ifdef BASE_CHECK
 	List list;
 	for (int i = 0; i < n; i++)
@@ -389,7 +450,8 @@ void main()
 	std::cout << std::endl;
 	std::cout << "___________________________________________\n";
 
-	for (int i : list + list2) {
+	for (int i : list + list2)
+	{
 		std::cout << i << "\t";
 	}
 	std::cout << std::endl;
@@ -397,5 +459,12 @@ void main()
 	List list3;
 	list3 = list + list2;
 	list3.print();
+	std::cout << "___________________________________________\n";
+
+	for (List::ReverseIterator rit = list3.rbegin(); rit != list3.rend(); rit++)
+	{
+		std::cout << *rit << "\t";
+	}
+	std::cout << std::endl;
 	std::cout << "___________________________________________\n";
 }
