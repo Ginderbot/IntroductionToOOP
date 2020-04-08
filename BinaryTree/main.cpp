@@ -32,9 +32,14 @@ public:
 		clear(this->Root);
 		std::cout << "TDestructor\t" << this << std::endl;
 	}
+	//Wrappers:
 	void insert(int Data)
 	{
 		insert(Data, this->Root);
+	}
+	void erase(int Data)
+	{
+		erase(Data, this->Root);
 	}
 	void clear()
 	{
@@ -55,9 +60,21 @@ public:
 	{
 		return maxValue(this->Root);
 	}
+	int count()const
+	{
+		return count(this->Root);
+	}
+	int summ()const
+	{
+		return summ(this->Root);
+	}
+	double avg()const
+	{
+		return (double)summ(this->Root) / count(this->Root);
+	}
 
-
-	//add Elements
+private:
+	////add Elements
 	void insert(int Data, Element* Root)
 	{
 		if (this->Root == nullptr)//Если дерево пустое тодобавляем едемент прямо в корень
@@ -71,10 +88,40 @@ public:
 			if (Root->pLeft == nullptr)Root->pLeft = new Element(Data);
 			else insert(Data, Root->pLeft);
 		}
-		else
+		else if (Data > Root->Data)
 		{
 			if (Root->pRight == nullptr)Root->pRight = new Element(Data);
 			else insert(Data, Root->pRight);
+		}
+	}
+	void erase(int Data, Element*& Root)
+	{
+		if (Root == nullptr)return;
+		if (Data < Root->Data)
+		{
+			erase(Data, Root->pLeft);
+		}
+		else if (Data > Root->Data)
+		{
+			erase(Data, Root->pRight);
+		}
+		else if (Data == Root->Data)
+		{
+			if (Root->pLeft == Root->pRight)
+			{
+				delete Root;
+				Root = nullptr;
+			}
+			else if (count(Root->pLeft)>count(Root->pRight))
+			{
+				Root->Data = maxValue(Root->pLeft);
+				erase(maxValue(Root->pLeft), Root->pLeft);
+			}
+			else
+			{
+				Root->Data = minValue(Root->pRight);
+				erase(minValue(Root->pRight), Root->pRight);
+			}
 		}
 	}
 	void clear(Element* Root)
@@ -87,15 +134,24 @@ public:
 	int minValue(Element* Root)
 	{
 		return(Root->pLeft) ? minValue(Root->pLeft) : Root->Data;
-		/*if (Root->pLeft == nullptr) return Root->Data;
-			return minValue();*/
 	}
 	int maxValue(Element* Root)
 	{
 		return(Root->pRight) ? maxValue(Root->pRight) : Root->Data;
-		//if (Root->pRight == nullptr)return Root->Data;
-		//	return maxValue();
 	}
+
+	int count(Element* Root)const
+	{
+		if (Root == nullptr)return 0;
+		return count(Root->pLeft) + count(Root->pRight) + 1;
+	}
+
+	int summ(Element*Root)const
+	{
+		if (Root == nullptr)return 0;
+		return summ(Root->pLeft) + summ(Root->pRight) + Root->Data;
+	}
+
 	//Metods
 	void print(Element*Root) const
 	{
@@ -105,17 +161,45 @@ public:
 		print(Root->pRight);
 	}
 };
-
+#define BASE_CHECK
+//#define ERASE_CHECK
 void main()
 {
+#ifdef BASE_CHECK
 	int n;
 	std::cout << "Input number elements: "; std::cin >> n;
 	BTree T800;
 	for (int i = 0; i < n; i++)
 	{
-		T800.insert(rand()%100);
+		T800.insert(rand() % 100);
 	}
 	T800.print();
-	std::cout<<"Min value: "<<T800.minValue()<<std::endl;
-	std::cout<<"Max value: "<<T800.maxValue()<<std::endl;
+	std::cout << "Min value: " << T800.minValue() << std::endl;
+	std::cout << "Max value: " << T800.maxValue() << std::endl;
+	std::cout << "Number of elements: " << T800.count() << std::endl;
+	std::cout << "Summ:\t\t " << T800.summ() << std::endl;
+	std::cout << "Avg:\t\t " << T800.avg() << std::endl;
+#endif // BASE_CHECK
+#ifdef ERASE_CHECK
+	BTree T800;
+	T800.insert(50);
+
+	T800.insert(25);
+	T800.insert(20);
+	T800.insert(30);
+
+	T800.insert(80);
+	T800.insert(64);
+	T800.insert(85);
+
+	T800.print();
+#endif // ERASE_CHECK
+
+
+	int value;
+	std::cout << "Type value to erase: "; std::cin >> value;
+	T800.erase(value);
+	T800.print();
+
+
 }
