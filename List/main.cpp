@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 
+
 template<typename T>
 class List
 {
@@ -10,14 +11,8 @@ class List
 		Element*pNext;
 		Element*pPrev;
 	public:
-		Element(T data, Element*pNext = nullptr, Element*pPrev = nullptr) :data(data), pNext(pNext), pPrev(pPrev)
-		{
-			std::cout << "EConstructor:\t" << this << std::endl;
-		}
-		~Element()
-		{
-			std::cout << "EDestructor:\t" << this << std::endl;
-		}
+		Element(T data, Element*pNext = nullptr, Element*pPrev = nullptr);
+		~Element();
 		friend class List;
 	};
 	Element*head;//Содержет указатель на начало списка
@@ -79,9 +74,7 @@ public:
 		{
 
 		}
-
 		// Operators
-
 		ReverseIterator& operator++()
 		{
 			Temp = Temp->pPrev;
@@ -102,7 +95,6 @@ public:
 		{
 			return Temp->data;
 		}
-
 		bool operator ==(const ReverseIterator& other)const
 		{
 			return this->Temp == other.Temp;
@@ -112,6 +104,7 @@ public:
 			return this->Temp != other.Temp;
 		}
 	};
+
 	Iterator begin()
 	{
 		return this->head;
@@ -343,33 +336,21 @@ public:
 		std::cout << "List size:\t" << size << std::endl;
 	}
 };
-//class List 
-//{
-//	Element *Head;//Адрес следуйщего элемента
-//	Element *Tail;//Адрес предыдущего элемента
-//	unsigned int Size;//Размер элемента
-//public:
-//	const Element* get_head()const
-//	{
-//		return Head;
-//	}
-//	Element* get_head()
-//	{
-//		return Head;
-//	}
-//	unsigned int get_size()const
-//	{
-//		return Size;
-//	}
-//	const Element* get_tail()const
-//	{
-//		return Tail;
-//	}
-//	Element* get_tail()
-//	{
-//		return Tail;
-//	}
-//};
+//class List
+//class List::Element
+template<typename T>
+List::Element::Element(T data, Element* pNext, Element* pPrev) :data(data), pNext(pNext), pPrev(pPrev)
+{
+	std::cout << "EConstructor:\t" << this << std::endl;
+}
+template<typename T>
+List::Element::~Element()
+{
+	std::cout << "EDestructor:\t" << this << std::endl;
+}
+//class List::Iterator
+//class List::ReverseIterator
+
 template<typename T>
 List<T> operator+(const List<T>& left, const List<T>&right)
 {
@@ -389,9 +370,6 @@ List<T> operator+(const List<T>& left, const List<T>&right)
 void main()
 {
 #ifdef OPERATORS+CHECK
-
-
-
 	int n;
 	std::cout << "Input list size: "; //std::cin >> n;
 #ifdef BASE_CHECK
