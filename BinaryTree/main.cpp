@@ -161,7 +161,7 @@ private:
 		print(Root->pRight);
 	}
 };
-#define BASE_CHECK
+//#define BASE_CHECK
 //#define ERASE_CHECK
 void main()
 {
@@ -194,12 +194,13 @@ void main()
 
 	T800.print();
 #endif // ERASE_CHECK
-
+	BTree T800 = { 50,25,30,75,64,85 };
 
 	int value;
 	std::cout << "Type value to erase: "; std::cin >> value;
 	T800.erase(value);
 	T800.print();
 
-
+	BTree T1000 = T800;
+	T1000.print();
 }
