@@ -24,17 +24,10 @@ public:
 	{
 		Element* Temp;
 	public:
-		Iterator(Element* Temp)
-		{
-			this->Temp = Temp;
-			//std::cout << "ItConstructor\t" <<this<< std::endl;
-		}
-		~Iterator()
-		{
-			//std::cout << "ItDestructor\t" <<this<< std::endl;
-		}
+		Iterator(Element* Temp);
+		~Iterator();
 		//Operators:
-		Iterator& operator++()
+		Iterator& operator++() 
 		{
 			Temp = Temp->pNext;
 			return *this;
@@ -105,10 +98,7 @@ public:
 		}
 	};
 
-	Iterator begin()
-	{
-		return this->head;
-	}
+	Iterator begin();
 	Iterator end()
 	{
 		return nullptr;
@@ -150,7 +140,7 @@ public:
 		{
 			push_back(*it);
 		}*/
-		for (T i : il) 
+		for (T i : il)
 		{
 			push_back(i);
 		}
@@ -183,7 +173,7 @@ public:
 	{
 		if (this == &other)return *this;
 		while (head)pop_front();
-		for (Element* Temp = other.head; Temp; Temp=Temp->pNext)push_back(Temp->data);
+		for (Element* Temp = other.head; Temp; Temp = Temp->pNext)push_back(Temp->data);
 		std::cout << "LCopyAssignment" << this << std::endl;
 		return *this;
 	}
@@ -258,7 +248,7 @@ public:
 		Temp->pPrev = Temp->pPrev->pNext = new Element(data, Temp, Temp->pPrev);
 		size++;
 	}
-	//delete elements
+	//remuving elemtnts
 	void pop_front()
 	{
 		if (head == tail)
@@ -316,8 +306,6 @@ public:
 		delete Temp;
 		size--;
 	}
-	//remuving elemtnts
-
 	//metods
 	void print()const
 	{
@@ -337,19 +325,38 @@ public:
 	}
 };
 //class List
+template<typename T>
+List<T>::Iterator List<T>::begin()
+{
+	return this->head;
+}
 //class List::Element
 template<typename T>
-List::Element::Element(T data, Element* pNext, Element* pPrev) :data(data), pNext(pNext), pPrev(pPrev)
+List<T>::Element::Element(T data, Element* pNext, Element* pPrev) :data(data), pNext(pNext), pPrev(pPrev)
 {
 	std::cout << "EConstructor:\t" << this << std::endl;
 }
 template<typename T>
-List::Element::~Element()
+List<T>::Element::~Element()
 {
 	std::cout << "EDestructor:\t" << this << std::endl;
 }
 //class List::Iterator
+template<typename T>
+List<T>::Iterator::Iterator(Element* Temp)
+{
+	this->Temp = Temp;
+	//std::cout << "ItConstructor\t" <<this<< std::endl;
+}
+template<typename T>
+List<T>::Iterator::~Iterator()
+{
+	//std::cout << "ItDestructor\t" <<this<< std::endl;
+}
+
 //class List::ReverseIterator
+
+
 
 template<typename T>
 List<T> operator+(const List<T>& left, const List<T>&right)
@@ -471,7 +478,7 @@ void main()
 	for (int i:list2)
 		std::cout << i << "\t";
 	std::cout << std::endl;
-	
+
 	List<int> list3 = list1 + list2;
 	list3.print();
 	for (int i : list3)
@@ -494,7 +501,7 @@ void main()
 		std::cout << i << "\t";
 	std::cout << std::endl;
 */
-	
+
 	List<std::string> list1 = { "Number","one" };
 	for (std::string i : list1)
 		std::cout << i << "\t";
