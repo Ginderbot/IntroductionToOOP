@@ -27,10 +27,27 @@ public:
 	{
 		std::cout << "TConstructor\t" << this << std::endl;
 	}
+	BTree(const std::initializer_list<int>&il) :BTree()
+	{
+		for (int i : il) insert(i);
+	}
+	BTree(const BTree& other) :BTree()
+	{
+		copy(this->Root, other.Root);
+		std::cout << "BTCopyConstructor\t" << this << std::endl;
+	}
 	~BTree()
 	{
 		clear(this->Root);
 		std::cout << "TDestructor\t" << this << std::endl;
+	}
+	BTree& operator=(const BTree& other)
+	{
+		if (this == &other)return *this;
+		clear();
+		copy(this->Root, other.Root);
+		std::cout << "BTCopyAssigment\t" << this << std::endl;
+		return *this;
 	}
 	//Wrappers:
 	void insert(int Data)
@@ -74,6 +91,13 @@ public:
 	}
 
 private:
+	void copy(Element*& thisRoot, Element* otherRoot)
+	{
+		if (otherRoot == nullptr)return;
+		thisRoot = new Element(otherRoot->Data);
+		copy(thisRoot->pLeft, otherRoot->pLeft);
+		copy(thisRoot->pRight, otherRoot->pRight);
+	}
 	////add Elements
 	void insert(int Data, Element* Root)
 	{
@@ -194,13 +218,14 @@ void main()
 
 	T800.print();
 #endif // ERASE_CHECK
-	BTree T800 = { 50,25,30,75,64,85 };
-
-	int value;
+	BTree T800 = { 50,25,20,30,75,64,85 };
+	T800.print();
+	/*int value;
 	std::cout << "Type value to erase: "; std::cin >> value;
 	T800.erase(value);
-	T800.print();
+	T800.print();*/
 
-	BTree T1000 = T800;
+	BTree T1000;
+	T1000 = T800;
 	T1000.print();
 }
