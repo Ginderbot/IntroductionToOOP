@@ -3,11 +3,14 @@
 #include<vector>
 #include<deque>
 #include<forward_list>
+#include <cstring>
+#include<string>
+#include<map>
 
 //#define ARRAY
 //#define VECTOR
 //#define DEQUE
-#define FORWARD_LIST
+//#define FORWARD_LIST
 const int SIZE = 5;
 
 #ifdef ARRAY
@@ -124,4 +127,24 @@ void main()
 	std::cout << std::endl;
 #endif // FORWARD_LIST
 
+
+	std::string number;
+	std::cout << "Input number car: "; std::cin >> number;
+	int money;
+	std::cout << "Input money: "; std::cin >> money;
+
+	std::map<std::string, int> baza;
+	baza.emplace("BI8888AA", 200);
+
+	try
+	{
+		int buff=money+baza.at(number);
+		baza[number]=buff;
+	}
+	catch (const std::exception&ex)
+	{
+		baza.emplace(number, money);
+	}
+	std::cout << baza["BI8888AA"] << std::endl;
+	std::cout << baza["BI0000AA"] << std::endl;
 }
