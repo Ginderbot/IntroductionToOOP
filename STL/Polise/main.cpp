@@ -4,6 +4,7 @@
 #include<map>
 #include<list>
 #include<Windows.h>
+#include"boost/algorithm/string.hpp"
 
 std::map<std::string, std::list<std::string>> init();
 void print_full_base(const std::map<std::string, std::list<std::string>>& base);
@@ -14,7 +15,8 @@ void insert(std::map<std::string, std::list<std::string>>& base);
 void main()
 {
 	setlocale(LC_ALL, "");
-	std::map<std::string, std::list<std::string>> base = init();
+	std::map<std::string, std::list<std::string>> base;// = init();
+	load(base);
 #define delimiter "\n------------------------------------\n"
 	print_full_base(base);
 	insert(base);
@@ -86,18 +88,31 @@ void load(std::map<std::string, std::list<std::string>>& base)
 {
 	base.clear();
 	std::string license_plate;
+	std::string violation;
 	std::list<std::string> violation_list;
 
 	std::ifstream fin("base.txt");
 
 	if (fin.is_open())
 	{
-		std::istream& stream = fin;
+		//std::istream& stream = fin;
+		//fin.seekg(0, std::ios::beg);
 		while (!fin.eof())
 		{
 			//fin.getline(license_plate.c_str(), 20, ":");
 			std::getline(fin, license_plate, ':');
+			if (license_plate == "")break;
+			std::getline(fin, violation, ';');
+			std::cout << license_plate << "-" << violation << std::endl;
+			
+			boost::algorithm::split (violation_list, violation, boost::is_any_of(","));
+			//base.insert(std::pair<std::string, std::list<std::string>>(license_plate, violation_list));
 
+			//for (std::string i : violation_list);
+			
+			
+			// print_full_base(base);
+			//system("PAUSE");
 		}
 	}
 	else
