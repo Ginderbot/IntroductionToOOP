@@ -37,6 +37,7 @@ void menu()
 	do
 	{
 		iterator = choice(iterator);
+		//std::cout << choice;
 	} while (getch() != 13);
 	if (iterator == 1)
 	{
