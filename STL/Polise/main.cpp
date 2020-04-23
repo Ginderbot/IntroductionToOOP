@@ -4,6 +4,7 @@
 #include<map>
 #include<list>
 #include<Windows.h>
+#include <conio.h>
 #include"boost/algorithm/string.hpp"
 
 std::map<std::string, std::list<std::string>> init();
@@ -11,18 +12,100 @@ void print_full_base(const std::map<std::string, std::list<std::string>>& base);
 void save(const std::map<std::string, std::list<std::string>>& base);
 void load(std::map<std::string, std::list<std::string>>& base);
 void insert(std::map<std::string, std::list<std::string>>& base);
+void menu();
+int choice(int iterator);
+void find(std::map<std::string, std::list<std::string>>& base);
 
 void main()
 {
 	setlocale(LC_ALL, "");
-	std::map<std::string, std::list<std::string>> base;// = init();
-	load(base);
+	//std::map<std::string, std::list<std::string>> base;// = init();
+	//std::map<std::string, std::list<std::string>> base = init();
+	//load(base);
 #define delimiter "\n------------------------------------\n"
-	print_full_base(base);
+	/*print_full_base(base);
 	insert(base);
 	print_full_base(base);
-	save(base);
+	save(base);*/
+	menu();
 }
+
+void menu()
+{
+	int iterator = 1;
+	std::map<std::string, std::list<std::string>> base = init();
+	do
+	{
+		iterator = choice(iterator);
+	} while (getch() != 13);
+	if (iterator == 1)
+	{
+		load(base);
+	}
+	else if (iterator == 2)//сохранение базы в файл
+	{
+		save(base);
+	}
+	else if (iterator == 3)//вывод базы на екран
+	{
+		print_full_base(base);
+	}
+	else if (iterator == 4)//вывод правонарушений по указанному номеру
+	{
+		find(base);
+	}
+}
+
+void find(std::map<std::string, std::list<std::string>>& base)
+{
+	std::string license_plate;
+
+	std::cout << "Введите номер автомобиля: ";
+	SetConsoleCP(1251);	std::getline(std::cin, license_plate);	SetConsoleCP(866);
+
+	//std::map<std::string, std::list<std::string>>::iterator offender = base.find(license_plate);
+	std::cout << license_plate << " - ";
+	for (std::list<std::string>::iterator it = base.find(license_plate)->second.begin(); it != base.find(license_plate)->second.end(); it++)
+	{
+		std::cout << *it << ",";
+	}
+	std::cout << "\b;\n";
+}
+
+int choice(int iterator)
+{
+	int choice = getch();
+	system("cls");
+	std::cout << choice << std::endl;
+	if (choice == 224)choice = getch();
+	if (choice == 72)
+	{
+		if (iterator > 1)iterator--;
+		else iterator = 4;
+	}
+	else if (choice == 80/*choice==224*/)
+	{
+		if (iterator < 4)iterator++;
+		else iterator = 1;
+	}
+	else if (choice != 13) std::cout << "Неверный ввод" << std::endl;
+	else
+	{
+		std::cout << "Error";
+	}
+
+	std::cout << "Сделайте Ваш выбор: " << std::endl;
+	(iterator == 1) ? std::cout << "==>" : std::cout << "   ";
+	std::cout << "Загрузка базы из файла" << std::endl;
+	(iterator == 2) ? std::cout << "==>" : std::cout << "   ";
+	std::cout << "Сохранение базы в файл" << std::endl;
+	(iterator == 3) ? std::cout << "==>" : std::cout << "   ";
+	std::cout << "Вывод базы на экран" << std::endl;
+	(iterator == 4) ? std::cout << "==>" : std::cout << "   ";
+	std::cout << "Вывод правонарушений по указанному номеру" << std::endl;
+	std::cout << delimiter;
+	return{ iterator };
+};
 
 std::map<std::string, std::list<std::string>> init()
 {
@@ -68,18 +151,22 @@ void print_full_base(const std::map<std::string, std::list<std::string>>& base)
 
 void save(const std::map<std::string, std::list<std::string>>& base)
 {
+	bool check = false;
 	std::ofstream fout("base.txt");
 	//CSV - Comma Separated values;
 	for (std::pair<std::string, std::list<std::string>> i : base)
 	{
+		if(check)fout << "\n";
 		fout << i.first << ":";
 		for (std::string j : i.second)
 		{
 			fout << j << ",";
 		}
-		fout.seekp(-1, std::ios::cur); //сдвинуть курсор на позицию -2
-		fout << ";\n";
+		fout.seekp(-1, std::ios::cur); //сдвинуть курсор на позицию -1
+		fout << ";";
+		check = true;
 	}
+
 	fout.close();
 	system("start notepad base.txt");
 }
@@ -104,13 +191,13 @@ void load(std::map<std::string, std::list<std::string>>& base)
 			if (license_plate == "")break;
 			std::getline(fin, violation, ';');
 			std::cout << license_plate << "-" << violation << std::endl;
-			
-			boost::algorithm::split (violation_list, violation, boost::is_any_of(","));
+
+			boost::algorithm::split(violation_list, violation, boost::is_any_of(","));
 			//base.insert(std::pair<std::string, std::list<std::string>>(license_plate, violation_list));
 
 			//for (std::string i : violation_list);
-			
-			
+
+
 			// print_full_base(base);
 			//system("PAUSE");
 		}
