@@ -161,6 +161,7 @@ public:
 	}
 	void stop()
 	{
+		engine.stop();
 		control_panel.idle_thread->join();
 	}
 	void panel()const
