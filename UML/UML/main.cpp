@@ -56,6 +56,7 @@ class Engine
 {
 	double consumption;
 	double consumption_per_second;
+	double speed_consumption_per_second;
 	bool is_started;
 public:
 	const double get_consumption()const
@@ -66,10 +67,16 @@ public:
 	{
 		return consumption_per_second;
 	}
+	void set_consumption_per_second(double consumption_per_second)
+	{
+		//if (consumption_per_second > .0001&&consumption_per_second < .009)
+			this->consumption_per_second = consumption_per_second;
+	}
 	Engine(double consumption)
 	{
 		this->consumption = consumption < 3 ? 3 : consumption>20 ? 20 : consumption;
-		this->consumption_per_second = this->consumption / 1000;
+		this->consumption_per_second = this->consumption / 10000;
+		this->speed_consumption_per_second = 0;
 		is_started = false;
 		std::cout << "Engine is redy:\t" << this << std::endl;
 	}
@@ -180,7 +187,7 @@ public:
 			std::cout << "Fuel:\t" << tank.get_fuel_level() << " liters.\n";
 			std::cout << (tank.get_fuel_level() < 5 ? "LOW FUEL" : "") << std::endl;
 			std::cout << "Speed:\t" << speed << " km/h.\n";
-
+			std::cout << "Consumtion per second" << engine.get_consumption_per_second();
 			using namespace std::chrono_literals;
 			std::this_thread::sleep_for(500ms);
 		}
@@ -200,6 +207,8 @@ public:
 		char key = 0;
 		do
 		{
+			change_consumtion();
+
 			key = _getch();
 			switch (key)
 			{
@@ -260,15 +269,6 @@ public:
 	}
 
 	/////////////////////////////	Driving		//////////////////////////////
-	void accellerate()
-	{
-		if (engine.started() && speed < max_speed)
-		{
-			speed += 10;
-		}
-		if (speed > max_speed)speed = max_speed;
-		//std::this_thread::sleep_for(1s);
-	}
 	void free_wheeling()
 	{
 		//using namespace std::chrono_literals;
@@ -277,6 +277,15 @@ public:
 			speed--;
 			std::this_thread::sleep_for(1s);
 		}
+	}
+	void change_consumtion()
+	{
+		if (speed > 0 && speed <= 60)engine.set_consumption_per_second(.002);
+		else if (speed > 60 && speed <= 100)engine.set_consumption_per_second(3.0014);
+		else if (speed > 100 && speed <= 140)engine.set_consumption_per_second(.002);
+		else if (speed > 140 && speed <= 200)engine.set_consumption_per_second(.0025);
+		else if (speed > 200 && speed <= 250)engine.set_consumption_per_second(0.003);
+		else engine.set_consumption_per_second(engine.get_consumption() / 10000);
 	}
 };
 
