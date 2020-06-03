@@ -56,7 +56,6 @@ class Engine
 {
 	double consumption;
 	double consumption_per_second;
-	double speed_consumption_per_second;
 	bool is_started;
 public:
 	const double get_consumption()const
@@ -69,14 +68,14 @@ public:
 	}
 	void set_consumption_per_second(double consumption_per_second)
 	{
-		//if (consumption_per_second > .0001&&consumption_per_second < .009)
-			this->consumption_per_second = consumption_per_second;
+		//if (consumption_per_second > .0001 && consumption_per_second < .009)
+		this->consumption_per_second = consumption_per_second;
 	}
+
 	Engine(double consumption)
 	{
 		this->consumption = consumption < 3 ? 3 : consumption>20 ? 20 : consumption;
 		this->consumption_per_second = this->consumption / 10000;
-		this->speed_consumption_per_second = 0;
 		is_started = false;
 		std::cout << "Engine is redy:\t" << this << std::endl;
 	}
@@ -177,17 +176,26 @@ public:
 	{
 		engine.stop();
 		if (control_panel.idle_thread->joinable())control_panel.idle_thread->join();
+		change_consumption();
 	}
 	void panel()const
 	{
 		while (driver_inside)
 		{
 			system("CLS");
+			for (int i = 0; i < speed / 2; i++)
+			{
+				if (i > 120)break;
+				std::cout << "|";
+			}
+			std::cout << std::endl;
 			std::cout << "Engine is " << (engine.started() ? "started" : "stopped") << ".\n";
 			std::cout << "Fuel:\t" << tank.get_fuel_level() << " liters.\n";
 			std::cout << (tank.get_fuel_level() < 5 ? "LOW FUEL" : "") << std::endl;
 			std::cout << "Speed:\t" << speed << " km/h.\n";
-			std::cout << "Consumtion per second" << engine.get_consumption_per_second();
+
+			std::cout << "Consumption per second: " << engine.get_consumption_per_second() << std::endl;
+
 			using namespace std::chrono_literals;
 			std::this_thread::sleep_for(500ms);
 		}
@@ -197,6 +205,7 @@ public:
 		using namespace std::chrono_literals;
 		while (engine.started() && tank.give_fuel(engine.get_consumption_per_second()))
 		{
+			change_consumption();
 			std::this_thread::sleep_for(1s);
 		}
 		engine.stop();
@@ -207,8 +216,6 @@ public:
 		char key = 0;
 		do
 		{
-			change_consumtion();
-
 			key = _getch();
 			switch (key)
 			{
@@ -247,6 +254,7 @@ public:
 				{
 					speed += 10;
 					if (speed > max_speed)speed = max_speed;
+					std::this_thread::sleep_for(1s);
 				}
 				break;
 			case 'S':
@@ -255,9 +263,10 @@ public:
 				else if (speed > 10)speed -= 10;
 				else if (speed > 5)speed -= 5;
 				else speed = 0;
+				std::this_thread::sleep_for(1s);
 				break;
 			}
-			std::this_thread::sleep_for(1s);
+			std::this_thread::sleep_for(1ms);
 			if (speed > 0 && control_panel.wheeling_thread == nullptr)
 				control_panel.wheeling_thread = new std::thread(&Car::free_wheeling, this);
 			else if (speed == 0 && control_panel.wheeling_thread && control_panel.wheeling_thread->joinable())
@@ -265,6 +274,7 @@ public:
 				control_panel.wheeling_thread->join();
 				control_panel.wheeling_thread = nullptr;
 			}
+			//change_consumption();
 		} while (key != 27);
 	}
 
@@ -278,14 +288,21 @@ public:
 			std::this_thread::sleep_for(1s);
 		}
 	}
-	void change_consumtion()
+	void change_consumption()
 	{
-		if (speed > 0 && speed <= 60)engine.set_consumption_per_second(.002);
-		else if (speed > 60 && speed <= 100)engine.set_consumption_per_second(3.0014);
-		else if (speed > 100 && speed <= 140)engine.set_consumption_per_second(.002);
-		else if (speed > 140 && speed <= 200)engine.set_consumption_per_second(.0025);
-		else if (speed > 200 && speed <= 250)engine.set_consumption_per_second(0.003);
-		else engine.set_consumption_per_second(engine.get_consumption() / 10000);
+		if (engine.started())
+		{
+			if (speed > 0 && speed <= 60)engine.set_consumption_per_second(.02);
+			else if (speed > 60 && speed <= 100)engine.set_consumption_per_second(.014);
+			else if (speed > 100 && speed <= 140)engine.set_consumption_per_second(.02);
+			else if (speed > 140 && speed <= 200)engine.set_consumption_per_second(.025);
+			else if (speed > 200 && speed <= 250)engine.set_consumption_per_second(.03);
+			else engine.set_consumption_per_second(engine.get_consumption() / 10000);
+		}
+		else
+		{
+			engine.set_consumption_per_second(0);
+		}
 	}
 };
 
